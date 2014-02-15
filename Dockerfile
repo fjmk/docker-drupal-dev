@@ -19,7 +19,7 @@ RUN echo "deb http://archive.ubuntu.com/ubuntu saucy-backports main restricted "
 RUN (apt-get update && apt-get upgrade -y -q && apt-get dist-upgrade -y -q && apt-get -y -q autoclean && apt-get -y -q autoremove)
 RUN (echo 'mysql-server-5.5 mysql-server/root_password password mypwd' | debconf-set-selections)
 RUN (echo 'mysql-server-5.5 mysql-server/root_password_again password mypwd' |debconf-set-selections)
-RUN apt-get install -y -q supervisor php5 libapache2-mod-php5 php5-gd apache2 php5-json cron php5-curl php5-xdebug mysql-server php5-mysql
+RUN apt-get install -y -q supervisor php5 libapache2-mod-php5 php5-gd apache2 php5-json cron php5-curl php5-xdebug mysql-server php5-mysql git curl
 
 ADD start.sh /start.sh
 ADD foreground.sh /etc/apache2/foreground.sh
@@ -29,6 +29,9 @@ ADD opcache.ini /etc/php5/mods-available/opcache.ini
 ADD xdebug.ini /etc/php5/mods-available/xdebug.ini
 ADD apache2.conf /etc/apache2/apache2.conf
 RUN echo "apc.rfc1867 = 1" >> /etc/php5/apache2/php.ini
+
+RUN (git clone https://github.com/drush-ops/drush.git /usr/local/drush && ln -s /usr/local/drush/drush /usr/local/bin/drush)
+RUN (curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer && cd /usr/local/drush && composer install)
 
 RUN (mkdir /root/.ssh)
 ADD authorized_keys /root/.ssh/authorized_keys 
