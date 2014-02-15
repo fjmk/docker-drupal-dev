@@ -24,12 +24,15 @@ RUN apt-get install -y -q supervisor php5 libapache2-mod-php5 php5-gd apache2 ph
 ADD start.sh /start.sh
 ADD foreground.sh /etc/apache2/foreground.sh
 ADD first-run.sh /first-run.sh
+ADD my.cnf /root/.my.cnf
+ADD opcache.ini /etc/php5/mods-available/opcache.ini
+ADD xdebug.ini /etc/php5/mods-available/xdebug.ini
 ADD apache2.conf /etc/apache2/apache2.conf
 RUN echo "apc.rfc1867 = 1" >> /etc/php5/apache2/php.ini
 
 RUN (mkdir /root/.ssh)
 ADD authorized_keys /root/.ssh/authorized_keys 
-RUN (chmod 750 /root/.ssh && chmod 600 /root/.ssh/authorized_keys)
+RUN (chmod 750 /root/.ssh && chmod 600 /root/.ssh/authorized_keys && chown root:root /root/.ssh/authorized_keys)
 
 RUN (chmod 750 /start.sh && chmod 750 /etc/apache2/foreground.sh && chmod 750 /first-run.sh)
 RUN (a2enmod rewrite)
