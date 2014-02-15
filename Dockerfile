@@ -28,7 +28,7 @@ ADD my.cnf /root/.my.cnf
 ADD opcache.ini /etc/php5/mods-available/opcache.ini
 ADD xdebug.ini /etc/php5/mods-available/xdebug.ini
 ADD apache2.conf /etc/apache2/apache2.conf
-RUN echo "apc.rfc1867 = 1" >> /etc/php5/apache2/php.ini
+ADD php.ini /etc/php5/apache2/php.ini
 
 RUN (git clone https://github.com/drush-ops/drush.git /usr/local/drush && ln -s /usr/local/drush/drush /usr/local/bin/drush)
 RUN (curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer && cd /usr/local/drush && composer install)
