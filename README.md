@@ -16,7 +16,7 @@ To keep your database between container starts, create a directory sites/default
 
 Now you are ready to start the webservice:
 cd /path/to/drupal7
-docker run -d -v `pwd`sites/default/files/mysql:/var/lib/mysql -v `pwd`:/var/www fjmk/drupal-dev
+docker run -d -v `pwd`sites/default/files/mysql:/var/lib/mysql -v `pwd`:/var/www fjmk/docker-drupal-dev
 
 The _first_ time you have to wait ~25 seconds before you can start the browser
 
