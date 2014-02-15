@@ -11,11 +11,3 @@ echo "create database drupal" | mysql -u root -pmypwd
 killall mysqld
 sleep 10s
 
-# gateway == remote host for debugging
-gateway=`route |grep default |awk '{print $2}'`
-
-(
-cat << EOF1
-xdebug.remote_host = $gateway
-EOF1
-) >> /etc/php5/mods-available/xdebug.ini
