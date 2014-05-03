@@ -1,6 +1,6 @@
 # ubuntu-13.10
 # VERSION               0.0.5
-FROM ubuntu:13.10
+FROM stackbrew/ubuntu:13.10
 MAINTAINER Frans Kuipers  "franskuipers@gmail.com"
 
 # ENV DEBIAN_FRONTEND noninteractive
