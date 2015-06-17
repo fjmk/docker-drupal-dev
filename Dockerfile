@@ -26,6 +26,9 @@ ADD xdebug.ini /etc/php5/mods-available/xdebug.ini
 ADD apache2-mpm-dev.conf /etc/apache2/mods-available/mpm_prefork.conf
 ADD php-drupal-dev.ini /etc/php5/mods-available/drupal.ini
 RUN php5enmod drupal
+ADD apache-default.conf /etc/apache2/sites-available/000-default.conf
+RUN mkdir /var/www/build
+ADD index.php /var/www/build/index.php
 
 RUN (git clone --branch $DRUSH_VERSION https://github.com/drush-ops/drush.git /usr/local/drush && ln -s /usr/local/drush/drush /usr/local/bin/drush)
 
@@ -43,6 +46,8 @@ RUN (a2enmod rewrite)
 
 RUN mkdir -p /var/log/supervisor
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+ENV DOCROOT build
 
 EXPOSE 22 80 9000
 CMD ["/bin/bash", "-e", "/start.sh"]
