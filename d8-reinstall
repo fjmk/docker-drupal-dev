@@ -8,7 +8,7 @@ rm -rf sites/default/files/*
 rm sites/default/settings.php
 rm -f /tmp/drupal_debug.txt
 
-sudo -u www-data -H drush site-install --site-name="drupal 8" --account-pass=frans --db-url="mysql://root:mypwd@localhost/drupal" --yes
+sudo -u www-data -H drush site-install --site-name="drupal 8" --account-pass=frans --db-url="mysql://root:mypwd@db/drupal" --yes
 sudo -u www-data -H drush pm-uninstall help color history rdf tour update --yes
 sudo -u www-data -H drush pm-enable devel devel_generate --yes
 sudo -u www-data -H drush generate-content 2 0 --yes

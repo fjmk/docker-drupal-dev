@@ -3,15 +3,13 @@
 
 A Dockerfile to be used to build an image to create a container to start a webservice for local drupal development.
 
-login : root password: ub ==> replace password when using it  
-mysql : root password: mypwd ==> replace password when using it
+login : root password: root ==> replace password when using it  
 
 to create and execute the container :
 
 checkout your drupal development code in /path/to/drupal7  
 create sites/default/files and sites/default/settings.php if they not exists and make them writable as needed 
 
-To keep your database between container starts, create a directory sites/default/files/mysql
   
 
 Now you are ready to start the webservice:  
