@@ -3,6 +3,7 @@
 FROM ubuntu:14.04
 MAINTAINER Frans Kuipers  "franskuipers@gmail.com"
 
+ENV DRUSH_VERSION 7.0.0
 ENV DEBIAN_FRONTEND noninteractive
 
 # enable ssh login
@@ -25,7 +26,7 @@ ADD xdebug.ini /etc/php5/mods-available/xdebug.ini
 ADD apache2.conf /etc/apache2/apache2.conf
 ADD php.ini /etc/php5/apache2/php.ini
 
-RUN (git clone https://github.com/drush-ops/drush.git /usr/local/drush && ln -s /usr/local/drush/drush /usr/local/bin/drush)
+RUN (git clone --branch $DRUSH_VERSION https://github.com/drush-ops/drush.git /usr/local/drush && ln -s /usr/local/drush/drush /usr/local/bin/drush)
 
 ## TODO REMOVE
 RUN (curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer && composer config -g github-oauth.github.com a772a8fb523b791d57713483faff328f61f06bec)
