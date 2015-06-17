@@ -24,7 +24,8 @@ ADD foreground.sh /etc/apache2/foreground.sh
 ADD opcache.ini /etc/php5/mods-available/opcache.ini
 ADD xdebug.ini /etc/php5/mods-available/xdebug.ini
 ADD apache2.conf /etc/apache2/apache2.conf
-ADD php.ini /etc/php5/apache2/php.ini
+ADD php-drupal-dev.ini /etc/php5/mods-available/drupal.ini
+RUN php5enmod drupal
 
 RUN (git clone --branch $DRUSH_VERSION https://github.com/drush-ops/drush.git /usr/local/drush && ln -s /usr/local/drush/drush /usr/local/bin/drush)
 
