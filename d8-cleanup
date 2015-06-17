@@ -1,8 +1,0 @@
-#!/bash
-cd /var/www
-drush sql-drop --yes
-
-chmod -R u+rw sites/default
-rm -rf sites/default/files/*
-rm sites/default/settings.php
-

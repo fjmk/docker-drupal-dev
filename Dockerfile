@@ -33,12 +33,6 @@ RUN (curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/l
 
 RUN (curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer && cd /usr/local/drush && composer install)
 
-# install some handy d8 scripts
-ADD d8-cleanup /usr/local/bin/d8-cleanup 
-ADD d8-reinstall /usr/local/bin/d8-reinstall 
-ADD d8-upgrade /usr/local/bin/d8-upgrade 
-RUN (chmod 750 /usr/local/bin/d8-*)
-
 RUN (mkdir /root/.ssh)
 ADD authorized_keys /root/.ssh/authorized_keys 
 RUN (chmod 750 /root/.ssh && chmod 600 /root/.ssh/authorized_keys && chown root:root /root/.ssh/authorized_keys)
