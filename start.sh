@@ -29,4 +29,11 @@ password = $DB_ENV_MYSQL_PASSWORD
 database = $DB_ENV_MYSQL_DATABASE
 EOF2
 
+# Make production container
+if [ "$ENVIRONMENT" == "production" ]; then
+  cp /root/conf/php-drupal-prod.ini /etc/php5/mods-available/drupal.ini
+  cp /root/conf/apache2-mpm-prod.conf /etc/apache2/mods-available/mpm_prefork.conf
+  php5dismod xdebug
+fi
+
 supervisord
