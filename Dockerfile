@@ -3,7 +3,7 @@
 FROM ubuntu:14.04
 MAINTAINER Frans Kuipers  "franskuipers@gmail.com"
 
-ENV DRUSH_VERSION 7.0.0
+ENV DRUSH_VERSION 7.x
 ENV DEBIAN_FRONTEND noninteractive
 
 # enable ssh login
@@ -17,7 +17,7 @@ RUN apt-get update \
 RUN echo "deb http://archive.ubuntu.com/ubuntu trusty-backports main restricted " >> /etc/apt/sources.list
 
 RUN (apt-get update && apt-get upgrade -y -q && apt-get dist-upgrade -y -q && apt-get -y -q autoclean && apt-get -y -q autoremove)
-RUN apt-get install -y -q nano supervisor php5 libapache2-mod-php5 php5-gd apache2 php5-json cron php5-curl php5-xdebug mysql-client php5-mysql git curl
+RUN apt-get install -y -q nano supervisor php5 libapache2-mod-php5 php5-gd apache2 php5-json cron php5-curl php5-xdebug mysql-client php5-mysql git curl unzip gzip
 
 ADD start.sh /start.sh
 ADD foreground.sh /etc/apache2/foreground.sh
