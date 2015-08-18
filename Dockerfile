@@ -23,7 +23,7 @@ ADD start.sh /start.sh
 ADD foreground.sh /etc/apache2/foreground.sh
 ADD opcache.ini /etc/php5/mods-available/opcache.ini
 ADD xdebug.ini /etc/php5/mods-available/xdebug.ini
-ADD apache2-mpm-dev.conf /etc/apache2/mods-available/mpm_prefork.conf
+ADD apache2-mpm-prod.conf /etc/apache2/mods-available/mpm_prefork.conf
 ADD php-drupal-dev.ini /etc/php5/mods-available/drupal.ini
 RUN php5enmod drupal
 ADD apache-default.conf /etc/apache2/sites-available/000-default.conf
