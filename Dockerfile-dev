@@ -1,0 +1,46 @@
+# create s CI container from docker-drupal
+# VERSION               0.1.0
+FROM fjmk/docker-drupal
+MAINTAINER Frans Kuipers  "franskuipers@gmail.com"
+
+# Add nodejs PPA
+RUN curl -sL https://deb.nodesource.com/setup | sudo bash -
+
+RUN apt-get -y install build-essential ssmtp xsltproc nodejs silversearcher-ag
+# Install & configure mailhog (alternative for mailcatcher)
+RUN curl -o /usr/local/bin/mailhog -SL 'https://github.com/mailhog/MailHog/releases/download/v0.1.6/MailHog_linux_amd64' && chmod +x /usr/local/bin/mailhog
+ADD config-dev/ssmtp.conf  /etc/ssmtp/ssmtp.conf
+ADD config-dev/mailhog.ini /etc/php5/mods-available/mailhog.ini
+ADD supervisor-mailhog.conf /etc/supervisor/conf.d/
+RUN php5enmod mailhog
+
+# Install php test packages for pareviewsh (https://github.com/klausi/pareviewsh.git)
+RUN cd /root \
+    && git clone --branch master https://github.com/squizlabs/PHP_CodeSniffer.git \
+    && git clone --branch 8.x-2.x http://git.drupal.org/project/coder.git \
+    && git clone --branch master http://git.drupal.org/sandbox/coltrane/1921926.git drupalsecure \
+    && git clone --branch master https://github.com/lucasdemarchi/codespell.git \
+    && git clone --branch 7.x-1.x https://github.com/klausi/pareviewsh.git \
+    && ln -s /root/coder/coder_sniffer/Drupal /root/PHP_CodeSniffer/CodeSniffer/Standards \
+    && ln -s /root/coder/coder_sniffer/DrupalPractice /root/PHP_CodeSniffer/CodeSniffer/Standards \
+    && ln -s /root/drupalsecure/DrupalSecure /root/PHP_CodeSniffer/CodeSniffer/Standards \
+    && ln -s /root/PHP_CodeSniffer/scripts/phpcs /usr/local/bin \
+    && ln -s /root/codespell/codespell.py /usr/local/bin/codespell \
+    && ln -s /root/pareviewsh/pareview.sh /usr/local/bin/ \
+    && curl -L https://www.npmjs.com/install.sh | sh \
+    && npm install -g eslint
+
+# patch pareview.sh see https://www.drupal.org/node/2320623
+RUN cd /root/drupalsecure/ \
+    && wget https://www.drupal.org/files/issues/parenthesis_closer_notice-2320623-2.patch \
+    && git apply parenthesis_closer_notice-2320623-2.patch
+    
+COPY config-dev/bin/ /usr/local/bin/
+RUN chmod +x /usr/local/bin/*
+ADD apache2-mpm-dev.conf /etc/apache2/mods-available/mpm_prefork.conf
+    
+EXPOSE 80 8025
+CMD ["/bin/bash", "-e", "/start.sh"]
+
+# Clean up APT when done.
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

@@ -1,0 +1,42 @@
+#!/bin/bash
+DEBUG_STATEMENTS="debug_backtrace\( \sprint_r\( var_dump\( dsm\( dpm\( dvm\( dpr\( dvr\( kpr\( dargs\( \sdd\( ddebug_backtrace\( db_queryd\( firep\( dfb\(" 
+## FILE_IGNORE="--ignore */devel/* --ignore *example* --ignore *LocalFileImpl.php --ignore *ZipFile.class.php --ignore *includes/general.php --ignore *page_manager.admin.inc --ignore *views.module"
+
+rm -f $REPORTS_DIR/ag-result
+
+# ag and bash needs space separated TEST_DIRS
+IGNORE_DIRS=`echo $IGNORE_DIRS |sed -e "s/,/ /g"`
+TEST_DIRS=`echo $TEST_DIRS |sed -e "s/,/ /g"`
+
+IGNORE=''
+for i in $IGNORE_DIRS; do
+    IGNORE="$IGNORE --ignore */$i/*"
+done
+
+for a in $DEBUG_STATEMENTS; do
+  ag $IGNORE "((^\s{0,})|(\;\s{0,}))$a" $ROOT_TEST_DIR/ >>$REPORTS_DIR/ag-result
+done
+
+# old way
+##for a in $TEST_DIRS; do
+##  for b in $DEBUG_STATEMENTS; do
+##    ag $FILE_IGNORE $IGNORE "((^\s{0,})|(\;\s{0,}))$b" $ROOT_TEST_DIR$a >>/tmp/ag-result
+##  done
+##done
+
+AG_RESULT=`cat $REPORTS_DIR/ag-result | wc -l`
+
+if [ "$AG_RESULT" -gt "0" ]; then
+  echo
+  echo "drupal-debug-test:	Debug statements found."
+  echo "                        Please check following files:"
+  echo
+  cat $REPORTS_DIR/ag-result
+  exit 1
+fi
+
+echo
+echo "drupal-debug-test:	No debug statements found."
+echo
+
+exit 0
