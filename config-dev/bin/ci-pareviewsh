@@ -1,0 +1,35 @@
+#!/bin/bash
+
+function gettestDirs () {
+  local a b c d ignore DIRS 
+
+DIRS=`find $1 -maxdepth 2 -type d | grep -v .git`
+ignore=`echo $2 |sed -e "s/,/ /g"`
+
+for d in $DIRS; do
+  contains=1
+  nb=0
+  a=`echo $d |sed -e "s/\// /g"`
+
+  for b in $a; do
+    let nb+=1
+    for c in $ignore; do
+      if [ $b = $c ]; then
+        contains=0
+      fi
+    done
+  done
+  if [ $contains = 1 ] && [ $nb = 4 ]; then
+    result="$result $d"
+  fi
+done
+
+echo $result
+}
+
+for d in $(gettestDirs "$ROOT_TEST_DIR" "$IGNORE_DIRS"); do
+  echo -e "\n\n++++++++++++++++++++++  pareviewsh directory $d  ++++++++++++++++++++++\n\n"
+  pareview.sh $d
+done
+
+echo -e "\n\n++++++++++++++++++++++  pareviewsh ended  ++++++++++++++++++++++\n\n"
